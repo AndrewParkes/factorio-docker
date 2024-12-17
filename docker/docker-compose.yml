@@ -5,8 +5,13 @@ services:
     container_name: watchtower
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    command: --interval 30 factorio
+    # command: --interval 1800 factorio --cleanup
     restart: always
+    environment:
+      WATCHTOWER_SCHEDULE: 0 0 4 * * *
+      TZ: Europe/London
+      WATCHTOWER_CLEANUP: "true"
+      WATCHTOWER_DEBUG: "true"
   factorio:
     container_name: factorio
     image: factoriotools/factorio:stable
@@ -16,8 +21,8 @@ services:
       args:
         # Check buildinfo.json for supported versions and SHAs
         # https://github.com/factoriotools/factorio-docker/blob/master/buildinfo.json
-        - VERSION=2.0.13
-        - SHA256=27b36901a39e593adf28418c0286142c6c7a9f83d156963c7369bd405a25c7d1
+        - VERSION=2.0.23
+        - SHA256=e819fc9ad6df061bf9d4bffc91988dd18d0e3982c8b1c22c0525d78bda3ef216
     ports:
       - "34197:34197/udp"
       - "27015:27015/tcp"
