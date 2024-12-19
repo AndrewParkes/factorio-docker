@@ -1,6 +1,9 @@
 version: '2'
 services:
   factorio:
+    container_name: factorio
+    image: factoriotools/factorio:stable
+    restart: always
     build:
       context: .
       args:
@@ -26,3 +29,15 @@ services:
 #    # which may be necessary for some setups like NAS or when using some proxy service like firewall rules.
 #    extra_hosts:
 #      - "host.docker.internal:host-gateway"
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    # command: --interval 1800 factorio --cleanup
+    restart: always
+    environment:
+      WATCHTOWER_SCHEDULE: 0 0 4 * * *
+      TZ: Europe/London
+      WATCHTOWER_CLEANUP: "true"
+      # WATCHTOWER_DEBUG: "true"
